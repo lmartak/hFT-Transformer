@@ -1,0 +1,6 @@
+**/__pycache__
+corpus/**/wav/*.wav
+corpus/**/feature/*.pkl
+corpus/**/config.json
+checkpoint*
+result/**/*

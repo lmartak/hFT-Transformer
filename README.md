@@ -43,6 +43,33 @@ If you want to evaluate the trained model using the validation set, you can chan
 $ ./evaluation/EXE-EVALUATION-MAESTRO.sh model_016_003.pkl valid
 ```
 
+## Usage on custom data
+For arbitrary set of `.wav` files, to transcribe them into `.mid` files:
+```bash
+# preprocess audio into mel-spectrogram features
+$ ./corpus/custom-EXE-CORPUS.sh /absolute/path/to/my/custom/wav/files/superduperset
+```
+
+The above creates folder `./corpus/superduperset` containing `wav`, `feature`, and `config.json`.
+Your custom `.wav` files are symlinked into `./corpus/superduperset/wav` folder. 
+The computed features are stored as `.pkl` files in `./corpus/superduperset/feature` folder.
+
+To generate transcriptions using only `output_2nd` as per the [paper](https://arxiv.org/abs/2307.04305) (bottom right of page 3):
+```bash
+$ ./evaluation/custom-EXE-EVALUATION.sh superduperset
+```
+
+The transcription outputs are in `./result/superduperset/` as follows:
+
+ * Note-level predictions:
+   * `*.json` - list of note events in the form `{'pitch': pitch, 'onset': onset, 'offset': offset, 'velocity': velocity}`
+   * `*.mid` - same data as in `*.json` as a MIDI file, all notes assigned to `instrument.program=0` (Acoustic Grand Piano).
+ * Frame-level predictions (as `pickle.dump(numpy_array)` files):
+   * `*.mpe` - presence/activity of notes
+   * `*.onset` - presence/activity of note onsets 
+   * `*.offset` - presence/activity of note offsets
+   * `*.velocity` - values of note velocities
+ 
 ## Citation
 Keisuke Toyama, Taketo Akama, Yukara Ikemiya, Yuhta Takida, Wei-Hsiang Liao, and Yuki Mitsufuji, "Automatic Piano Transcription with Hierarchical Frequency-Time Transformer," in Proceedings of the 24th International Society for Music Information Retrieval Conference, 2023.
 ```
